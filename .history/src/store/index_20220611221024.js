@@ -14,7 +14,7 @@ export default createStore({
   },
   // 配置插件
   plugins: [
-    // 默认存储在localStorageaxios
+    // 默认存储在localStorage
     createPersistedState({
       // 本地存储名字
       key: 'erabbit-client',

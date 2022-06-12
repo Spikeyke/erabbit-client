@@ -13,13 +13,5 @@ export default createStore({
     category
   },
   // 配置插件
-  plugins: [
-    // 默认存储在localStorageaxios
-    createPersistedState({
-      // 本地存储名字
-      key: 'erabbit-client',
-      // 指定需要存储的模块
-      paths: ['user', 'cart']
-    })
-  ]
+  plugins: [createPersistedState]
 })
