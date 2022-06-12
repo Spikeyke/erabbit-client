@@ -15,7 +15,7 @@ const instance = axios.create({
     timeout: 5000
 })
 
-instance.interceptors.request.use(config => {
+instance.interceptors.request.use(() => {
     // 拦截业务逻辑
     // 进行请求配置的修改
     // 如果本地有token就在头部携带
@@ -43,7 +43,7 @@ instance.interceptors.response.use(res => res.data, err => {
         // 当前路由地址
         // 组件里： 'user?a=10' $route.path === /user   $route.fullPath === /user?a=10
         // js模块中：router.currentRouter.value.fullPath 就是当前路由地址，router.currentRoute 时ref响应式数据
-        const fullPath = encodeURIComponent(router.currentRoute.value.fullPath)
+        const fullPath = encodeURIComponent(router.currentRouter.value.fullPath)
         // encodeURIComponent 转换uri编码，防止解析地址出问题
         router.push('/login?redirectUrl=' + fullPath)
     }

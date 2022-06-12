@@ -7,7 +7,7 @@
   <!-- 内容容器 -->
   <div class="main">
     <!-- 二级路由 -->
-    <RouterView />
+    <router-view/>
   </div>
 
   <!-- 底部组件 -->

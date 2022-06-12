@@ -7,11 +7,11 @@
   <!-- 内容容器 -->
   <div class="main">
     <!-- 二级路由 -->
-    <RouterView />
+    <router-view/>
   </div>
 
   <!-- 底部组件 -->
-  <footer>底部组件</footer>
+  <footer></footer>
 </template>
 
 <script>
