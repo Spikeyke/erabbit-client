@@ -12,6 +12,7 @@ const routes = [
     component: Layout,
     children: [
       { path: '/', component: Home },
+      // 动态路由匹配
       { path: '/category/:id', component: TopCategory },
       { path: '/category/sub/:id', component: SubCategory },
     ]
