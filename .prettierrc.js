@@ -5,7 +5,7 @@ module.exports = {
   "insertPragma": false,
   "jsxBracketSameLine": false,
   "plugins": [],
-  "printWidth": 200,
+  "printWidth": 100,
   "proseWrap": "preserve",
   "rangeStart": 0,
   "requirePragma": false,

@@ -1,16 +1,36 @@
 <template>
   <div class="home-category" @mouseleave="categoryId = null">
     <ul class="menu">
-      <li :class="{ active: categoryId === item.id }" v-for="item in menuList" :key="item.id" @mouseenter="categoryId = item.id">
+      <li
+        :class="{ active: categoryId === item.id }"
+        v-for="item in menuList"
+        :key="item.id"
+        @mouseenter="categoryId = item.id"
+      >
         <RouterLink :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         <template v-if="item.children">
-          <RouterLink v-for="sub in item.children" :key="sub.id" :to="`/category/sub/${sub.id}`">{{ sub.name }}</RouterLink>
+          <RouterLink v-for="sub in item.children" :key="sub.id" :to="`/category/sub/${sub.id}`">{{
+            sub.name
+          }}</RouterLink>
+        </template>
+        <!-- 骨架 -->
+        <template v-else>
+          <XtxSkeleton
+            height="18px"
+            width="60px"
+            bg="rgba(255,255,255,0.2)"
+            style="margin-right: 5px"
+          />
+          <XtxSkeleton height="18px" width="50px" bg="rgba(255,255,255,0.2)" />
         </template>
       </li>
     </ul>
     <!-- 弹层 -->
     <div class="layer">
-      <h4>{{ currCategory && currCategory.id === 'brand' ? '品牌' : '分类' }}推荐 <small>根据您的购买或浏览记录推荐</small></h4>
+      <h4>
+        {{ currCategory && currCategory.id === 'brand' ? '品牌' : '分类' }}推荐
+        <small>根据您的购买或浏览记录推荐</small>
+      </h4>
       <!-- 商品 -->
       <ul v-if="currCategory && currCategory.goods">
         <li v-for="item in currCategory.goods" :key="item.id">
@@ -45,6 +65,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 import { findBrand } from '@/api/home'
+import XtxSkeleton from '@/components/library/xtx-skeleton.vue'
 export default {
   name: 'HomeCategory',
   setup() {
@@ -70,20 +91,18 @@ export default {
       list.push(brand)
       return list
     })
-
     // 得到弹出层的推荐商品数据
     const categoryId = ref(null)
     const currCategory = computed(() => {
       return menuList.value.find(item => item.id === categoryId.value)
     })
-
     // 获取品牌数据，尽量不要使用async在setup上
     findBrand().then(data => {
       brand.brands = data.result
     })
-
     return { menuList, categoryId, currCategory }
-  }
+  },
+  components: { XtxSkeleton }
 }
 </script>
 
@@ -204,6 +223,18 @@ export default {
     .layer {
       display: block;
     }
+  }
+}
+// 骨架动画
+.xtx-skeleton {
+  animation: fade 1s linear infinite alternate;
+}
+@keyframes fade {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
   }
 }
 </style>
