@@ -14,6 +14,14 @@ export const findBrand = (limit = 6) => {
 /* 
     获取广告区轮播图
 */
-export const findBanner=()=>{
-    return request('home/banner','get')
+export const findBanner = () => {
+    return request('home/banner', 'get')
+
+
+}
+/* 
+    获取新鲜好物
+*/
+export const findNew = () => {
+    return request('home/new', 'get')
 }
