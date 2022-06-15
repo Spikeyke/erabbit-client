@@ -4,19 +4,21 @@
       <template #right>
         <XtxMore path="/" />
       </template>
-      <!-- 面板内容 -->
-      <Transition name="fade">
-        <ul v-if="goods.length" ref="panel" class="goods-list">
-          <li v-for="item in goods" :key="item.id">
-            <router-link :to="`/product/${item.id}`">
-              <img :src="item.picture" alt="" />
-              <p class="name ellipsis">{{ item.name }}</p>
-              <p class="price">&yen;{{ item.price }}</p>
-            </router-link>
-          </li>
-        </ul>
-        <HomeSkeleton bg="#f0f9f4" v-else />
-      </Transition>
+      <div ref="target" style="position: relative; height: 426px">
+        <!-- 面板内容 -->
+        <Transition name="fade">
+          <ul v-if="goods.length" ref="panel" class="goods-list">
+            <li v-for="item in goods" :key="item.id">
+              <router-link :to="`/product/${item.id}`">
+                <img :src="item.picture" alt="" />
+                <p class="name ellipsis">{{ item.name }}</p>
+                <p class="price">&yen;{{ item.price }}</p>
+              </router-link>
+            </li>
+          </ul>
+          <HomeSkeleton bg="#f0f9f4" v-else />
+        </Transition>
+      </div>
     </HomePanel>
   </div>
 </template>
@@ -24,8 +26,8 @@
 <script>
 import HomePanel from './home-panel.vue'
 import HomeSkeleton from './home-skeleton.vue'
-import { ref } from 'vue'
 import { findNew } from '@/api/home'
+import { useLazyData } from '@/hooks'
 export default {
   name: 'HomeNew',
   components: {
@@ -33,17 +35,21 @@ export default {
     HomeSkeleton
   },
   setup() {
-    const goods = ref([])
-    findNew().then(data => {
-      goods.value = data.result
-    })
-    return { goods }
+    // const goods = ref([])
+    // findNew().then(data => {
+    //   goods.value = data.result
+    // })
+
+    // 数据懒加载
+    // 1、target 去绑定一个监听对象，最好是DOM
+    // 2、传入API函数，内部获取调用，返回就是响应式数据
+    const { target, result } = useLazyData(findNew)
+    return { goods: result, target }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
 .goods-list {
   display: flex;
   justify-content: space-between;
