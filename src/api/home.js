@@ -19,9 +19,17 @@ export const findBanner = () => {
 
 
 }
+
 /* 
     获取新鲜好物
 */
 export const findNew = () => {
     return request('home/new', 'get')
+}
+
+/* 
+    获取人气推荐
+*/
+export const findHot = () => {
+    return request('home/hot', 'get')
 }
