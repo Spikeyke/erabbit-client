@@ -5,27 +5,32 @@
         <XtxMore path="/" />
       </template>
       <!-- 面板内容 -->
-      <ul ref="panel" class="goods-list">
-        <li v-for="item in goods" :key="item.id">
-          <router-link :to="`/product/${item.id}`">
-            <img :src="item.picture" alt="" />
-            <p class="name ellipsis">{{ item.name }}</p>
-            <p class="price">&yen;{{ item.price }}</p>
-          </router-link>
-        </li>
-      </ul>
+      <Transition name="fade">
+        <ul v-if="goods.length" ref="panel" class="goods-list">
+          <li v-for="item in goods" :key="item.id">
+            <router-link :to="`/product/${item.id}`">
+              <img :src="item.picture" alt="" />
+              <p class="name ellipsis">{{ item.name }}</p>
+              <p class="price">&yen;{{ item.price }}</p>
+            </router-link>
+          </li>
+        </ul>
+        <HomeSkeleton bg="#f0f9f4" v-else />
+      </Transition>
     </HomePanel>
   </div>
 </template>
 
 <script>
 import HomePanel from './home-panel.vue'
+import HomeSkeleton from './home-skeleton.vue'
 import { ref } from 'vue'
 import { findNew } from '@/api/home'
 export default {
   name: 'HomeNew',
   components: {
-    HomePanel
+    HomePanel,
+    HomeSkeleton
   },
   setup() {
     const goods = ref([])
@@ -38,6 +43,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .goods-list {
   display: flex;
   justify-content: space-between;
