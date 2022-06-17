@@ -4,7 +4,11 @@
       <!-- 面包屑 -->
       <XtxBread>
         <XtxBreadItem to="/">首页</XtxBreadItem>
-        <XtxBreadItem>{{ topCategory.name }}</XtxBreadItem>
+        <!-- 过渡模式：out-in 当前元素先进行过渡，完成之后新元素过渡进入 -->
+        <Transition name="fade-right" mode="out-in">
+          <!-- 动画只在节点创建移除时生效，加上key属性关联ID才会创建和移除 -->
+          <XtxBreadItem :key="topCategory.id">{{ topCategory.name }}</XtxBreadItem>
+        </Transition>
       </XtxBread>
       <!-- 轮播图 -->
       <XtxCarousel :sliders="sliders" style="height: 500px" />
@@ -88,6 +92,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 面包屑动画
+// 进入：右侧 20px的位移 透明度为0 做过度0.5s 本来位置 没有位移 透明度1
+// 离开：本来位置 没有位移 透明度1 做过度0.5s 右侧20px的位移 透明度0
+.fade-right-enter-from,
+.fade-right-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+.fade-right-enter-active,
+.fade-right-leave-active {
+  transition: all 0.5s;
+}
+.fade-right-enter-to,
+.fade-right-leave-from {
+  transform: none;
+  opacity: 1;
+}
 .top-category {
   h3 {
     font-size: 28px;
