@@ -19,8 +19,11 @@ export default {
     const dymanicItems = []
     items.forEach((item, i) => {
       dymanicItems.push(item)
-      if (i < items.length - 1) {
-        dymanicItems.push(h('i', { class: 'iconfont icon-angle-right' }))
+      // 对插槽节点进行判断（是XtxBreadItem和Transition才进行组装）
+      if (item.type.name === 'XtxBreadItem' || item.type.displayName === 'Transition') {
+        if (i < items.length - 1) {
+          dymanicItems.push(h('i', { class: 'iconfont icon-angle-right' }))
+        }
       }
     })
     return h('div', { class: 'xtx-bread' }, dymanicItems)
