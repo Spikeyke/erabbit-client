@@ -3,8 +3,12 @@
     <div class="container">
       <!-- 面包屑 -->
       <SubBread />
+      <!-- 筛选区 -->
       <SubFilter />
-      <XtxCheckbox v-model="isAllChecked"></XtxCheckbox>
+      <!-- 商品面板（排序+列表） -->
+      <div class="goods-list">
+        <SubSort />
+      </div>
     </div>
   </div>
 </template>
@@ -14,9 +18,10 @@ import { ref } from 'vue'
 import SubBread from './components/sub-bread.vue'
 import SubFilter from './components/sub-filter.vue'
 import XtxCheckbox from '@/components/library/xtx-checkbox.vue'
+import SubSort from './components/sub-sort.vue'
 export default {
   name: 'SubCategory',
-  components: { SubBread, SubFilter, XtxCheckbox },
+  components: { SubBread, SubFilter, XtxCheckbox, SubSort },
   setup() {
     const isAllChecked = ref(true)
     return { isAllChecked }
@@ -24,4 +29,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.goods-list {
+  background: #fff;
+  padding: 0 25px;
+  margin-top: 25px;
+}
+</style>
