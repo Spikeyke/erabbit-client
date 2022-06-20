@@ -1,21 +1,26 @@
 <template>
-  <div class="xtx-goods-page">
+  <div class="xtx-goods-page" v-if="goods">
     <div class="container">
       <!-- 面包屑 -->
       <XtxBread>
         <XtxBreadItem to="/">首页</XtxBreadItem>
-        <XtxBreadItem v-if="goods" :to="`/category/${goods.categories[1].id}`">{{
+        <XtxBreadItem :to="`/category/${goods.categories[1].id}`">{{
           goods.categories[1].name
         }}</XtxBreadItem>
-        <XtxBreadItem v-if="goods" :to="`/category/sub/${goods.categories[0].id}`">{{
+        <XtxBreadItem :to="`/category/sub/${goods.categories[0].id}`">{{
           goods.categories[0].name
         }}</XtxBreadItem>
-        <XtxBreadItem v-if="goods">{{ goods.name }}</XtxBreadItem>
+        <XtxBreadItem>{{ goods.name }}</XtxBreadItem>
       </XtxBread>
       <!-- 商品信息 -->
-      <div class="goods-info"></div>
+      <div class="goods-info">
+        <div class="media">
+          <GoodsImage :images="goods.mainPictures" />
+        </div>
+        <div class="spec"></div>
+      </div>
       <!-- 商品推荐 -->
-      <GoodsRelevant v-if="goods"/>
+      <GoodsRelevant />
       <!-- 商品详情 -->
       <div class="goods-footer">
         <div class="goods-article">
@@ -33,13 +38,14 @@
 
 <script>
 import { ref } from '@vue/reactivity'
-import GoodsRelevant from './components/goods-relevant'
 import { useRoute } from 'vue-router'
 import { findGoods } from '@/api/product'
 import { nextTick, watch } from '@vue/runtime-core'
+import GoodsRelevant from './components/goods-relevant'
+import GoodsImage from './components/goods-image.vue'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant },
+  components: { GoodsRelevant, GoodsImage },
   setup() {
     // 1、获取商品详情，进行渲染
     const goods = useGoods()
@@ -56,7 +62,7 @@ const useGoods = () => {
     newVal => {
       if (newVal && `/product/${newVal}`) {
         findGoods(route.params.id).then(data => {
-            // 让商品数据为null，然后使用v-if的组件可以重新销毁和创建
+          // 让商品数据为null，然后使用v-if的组件可以重新销毁和创建
           goods.value = null
           nextTick(() => {
             goods.value = data.result
@@ -75,7 +81,18 @@ const useGoods = () => {
 .goods-info {
   min-height: 600px;
   background: #fff;
+  display: flex;
+  .media {
+    width: 580px;
+    height: 600px;
+    padding: 30px 50px;
+  }
+  .spec {
+    flex: 1;
+    padding: 30px 30px 30px 0;
+  }
 }
+
 .goods-footer {
   display: flex;
   margin-top: 20px;
