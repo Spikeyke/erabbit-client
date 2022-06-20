@@ -4,14 +4,18 @@
       <!-- 面包屑 -->
       <XtxBread>
         <XtxBreadItem to="/">首页</XtxBreadItem>
-        <XtxBreadItem to="/">手机</XtxBreadItem>
-        <XtxBreadItem to="/">华为</XtxBreadItem>
-        <XtxBreadItem to="/">p30</XtxBreadItem>
+        <XtxBreadItem v-if="goods" :to="`/category/${goods.categories[1].id}`">{{
+          goods.categories[1].name
+        }}</XtxBreadItem>
+        <XtxBreadItem v-if="goods" :to="`/category/sub/${goods.categories[0].id}`">{{
+          goods.categories[0].name
+        }}</XtxBreadItem>
+        <XtxBreadItem v-if="goods">{{ goods.name }}</XtxBreadItem>
       </XtxBread>
       <!-- 商品信息 -->
       <div class="goods-info"></div>
       <!-- 商品推荐 -->
-      <GoodsRelevant />
+      <GoodsRelevant v-if="goods"/>
       <!-- 商品详情 -->
       <div class="goods-footer">
         <div class="goods-article">
@@ -28,10 +32,42 @@
 </template>
 
 <script>
+import { ref } from '@vue/reactivity'
 import GoodsRelevant from './components/goods-relevant'
+import { useRoute } from 'vue-router'
+import { findGoods } from '@/api/product'
+import { nextTick, watch } from '@vue/runtime-core'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant }
+  components: { GoodsRelevant },
+  setup() {
+    // 1、获取商品详情，进行渲染
+    const goods = useGoods()
+    return { goods }
+  }
+}
+// 获取商品详情
+const useGoods = () => {
+  // 出现路由地址商品ID发生变化，但是不会重新初始化组件
+  const goods = ref(null)
+  const route = useRoute()
+  watch(
+    () => route.params.id,
+    newVal => {
+      if (newVal && `/product/${newVal}`) {
+        findGoods(route.params.id).then(data => {
+            // 让商品数据为null，然后使用v-if的组件可以重新销毁和创建
+          goods.value = null
+          nextTick(() => {
+            goods.value = data.result
+          })
+        })
+      }
+    },
+    { immediate: true }
+  )
+
+  return goods
 }
 </script>
 
