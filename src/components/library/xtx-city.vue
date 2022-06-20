@@ -35,7 +35,6 @@ export default {
   setup(props, { emit }) {
     // 显示隐藏数据
     const visible = ref(false)
-
     // 所有省市区数据
     const allCityData = ref([])
     // 正在加载数据
