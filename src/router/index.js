@@ -3,6 +3,7 @@ const Layout = () => import('@/views/Layout')
 const Home = () => import('@/views/home')
 const TopCategory = () => import('@/views/category/index')
 const SubCategory = () => import('@/views/category/sub')
+const Goods = () => import('@/views/goods/index')
 
 // 路由规则
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
       // 动态路由匹配
       { path: '/category/:id', component: TopCategory },
       { path: '/category/sub/:id', component: SubCategory },
+      { path: '/product/:id', component: Goods }
     ]
   }
 ]
