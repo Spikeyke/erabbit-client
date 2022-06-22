@@ -52,7 +52,7 @@
 import { ref } from '@vue/reactivity'
 import { useRoute } from 'vue-router'
 import { findGoods } from '@/api/product'
-import { nextTick, watch } from '@vue/runtime-core'
+import { nextTick, provide, watch } from '@vue/runtime-core'
 import GoodsRelevant from './components/goods-relevant'
 import GoodsImage from './components/goods-image.vue'
 import GoodsSales from './components/goods-sales.vue'
@@ -75,6 +75,9 @@ export default {
         goods.value.inventory = sku.inventory
       }
     }
+
+    // 提供goods数据给后代组件使用
+    provide('goods',goods)
 
     // 选择的数量
     const num = ref(1)
