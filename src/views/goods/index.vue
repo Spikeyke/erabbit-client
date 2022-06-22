@@ -36,7 +36,7 @@
           <!-- 商品+评价 -->
           <GoodsTabs />
           <!-- 注意事项 -->
-          <div class="goods-warn"></div>
+          <GoodsWarn />
         </div>
         <!-- 24热榜+周热销榜 -->
         <div class="goods-aside">
@@ -61,9 +61,10 @@ import GoodsSku from './components/goods-sku.vue'
 import XtxNumbox from '../../components/library/xtx-numbox.vue'
 import GoodsTabs from './components/goods-tabs.vue'
 import GoodsHot from './components/goods-hot.vue'
+import GoodsWarn from './components/goods-warn.vue'
 export default {
   name: 'XtxGoodsPage',
-  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, XtxNumbox, GoodsTabs, GoodsHot },
+  components: { GoodsRelevant, GoodsImage, GoodsSales, GoodsName, GoodsSku, XtxNumbox, GoodsTabs, GoodsHot, GoodsWarn },
   setup() {
     // 1、获取商品详情，进行渲染
     const goods = useGoods()
