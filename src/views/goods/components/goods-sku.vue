@@ -52,7 +52,6 @@ const getPathMap = skus => {
       })
     }
   })
-  console.log(skus)
   return pathMap
 }
 const getSelectedValues = specs => {
