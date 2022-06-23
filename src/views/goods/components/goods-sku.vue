@@ -87,6 +87,7 @@ const initDefaultSelected = (goods, skuId) => {
   const sku = goods.skus.find(sku => sku.id === skuId)
   goods.specs.forEach((item, i) => {
     const val = item.values.find(val => val.name === sku.specs[i].valueName)
+    console.log(goods);
     val.selected = true
   })
 }
