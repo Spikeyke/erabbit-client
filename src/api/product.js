@@ -36,7 +36,9 @@ export const findGoodsHot = ({ id, limit = 3, type = 1 }) => {
     @return
 */
 export const findGoodsCommentInfo = (id) => {
-    return request(`/goods/${id}/evaluate`, 'get')
+    // return request(`/goods/${id}/evaluate`, 'get')
+    // axios 遇见 http https 开头的地址，不会加上基准地址
+    return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate`, 'get')
 }
 
 /* 
@@ -46,5 +48,6 @@ export const findGoodsCommentInfo = (id) => {
     @return
 */
 export const findGoodsCommentList = (id, params) => {
-    return request(`/goods/${id}/evaluate/page`, 'get', params)
+    // return request(`/goods/${id}/evaluate/page`, 'get', params)
+    return request(`https://mock.boxuegu.com/mock/1175/goods/${id}/evaluate/page`, 'get', params)
 }

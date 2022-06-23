@@ -63,6 +63,8 @@
           <div class="text">
             {{ item.content }}
           </div>
+          <!-- 评论图片组件 -->
+          <GoodsCommentImage v-if="item.pictures.length" :pictures="item.pictures" />
           <div class="time">
             <span>{{ item.createTime }}</span>
             <span class="zan"><i class="iconfont icon-dianzan"></i>{{ item.praiseCount }}</span>
@@ -78,8 +80,10 @@ import { reactive, ref } from '@vue/reactivity'
 import { inject, watch } from '@vue/runtime-core'
 import { findGoodsCommentInfo } from '@/api/product'
 import { findGoodsCommentList } from '@/api/product'
+import GoodsCommentImage from './goods-comment-image.vue'
 export default {
   name: 'GoodsComment',
+  components: { GoodsCommentImage },
   setup() {
     // 获取评价信息
     const commentInfo = ref(null)
@@ -123,7 +127,6 @@ export default {
     const changeSort = sortField => {
       reqParams.sortField = sortField
     }
-
     // 准备筛选条件数据
     const reqParams = reactive({
       page: 1,
@@ -133,28 +136,24 @@ export default {
       // 排序方式：praiseCount 热度 createTime 最新
       sortField: null
     })
-
     // 初始化需要发请求，筛选条件发生改变发请求
     const commentList = ref([])
     watch(
       reqParams,
       () => {
-        findGoodsCommentList(goods.id, reqParams).then(data => {
+        findGoodsCommentList(goods.value.id, reqParams).then(data => {
           commentList.value = data.result.items
         })
       },
       { immediate: true }
     )
-
-    // 定于转换数据的函数（对应vue2.0的过滤器）
+    // 定义转换数据的函数（对应vue2.0的过滤器）
     const formatSpecs = specs => {
       return specs.reduce((p, c) => `${p} ${c.name} :${c.nameValue}`, '').trim()
     }
-
     const formatNickName = nickName => {
       return nickName.substr(0, 1) + '****' + nickName.substr(-1)
     }
-
     return {
       commentInfo,
       currentTagIndex,
@@ -165,7 +164,8 @@ export default {
       formatSpecs,
       formatNickName
     }
-  }
+  },
+  components: { GoodsCommentImage }
 }
 </script>
 
