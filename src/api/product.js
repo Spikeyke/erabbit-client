@@ -38,3 +38,13 @@ export const findGoodsHot = ({ id, limit = 3, type = 1 }) => {
 export const findGoodsCommentInfo = (id) => {
     return request(`/goods/${id}/evaluate`, 'get')
 }
+
+/* 
+    查询商品评价列表
+    @param {String} id 商品ID
+    @param {Object} params 商品ID
+    @return
+*/
+export const findGoodsCommentList = (id, params) => {
+    return request(`/goods/${id}/evaluate/page`, 'get', params)
+}
