@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="sort">
+    <div class="sort" v-if="commentInfo">
       <span>排序：</span>
       <a
         @click="changeSort(null)"
@@ -73,7 +73,13 @@
       </div>
     </div>
     <!-- 分页组件 -->
-    <XtxPagination />
+    <XtxPagination
+      v-if="total"
+      @current-change="changePagerFn"
+      :total="total"
+      :page-size="reqParams.pageSize"
+      :current-page="reqParams.page"
+    />
   </div>
 </template>
 
@@ -86,7 +92,7 @@ import GoodsCommentImage from './goods-comment-image.vue'
 import XtxPagination from '@/components/library/xtx-pagination.vue'
 export default {
   name: 'GoodsComment',
-  components: { GoodsCommentImage },
+  components: { GoodsCommentImage, XtxPagination },
   setup() {
     // 获取评价信息
     const commentInfo = ref(null)
@@ -141,11 +147,13 @@ export default {
     })
     // 初始化需要发请求，筛选条件发生改变发请求
     const commentList = ref([])
+    const total = ref(0)
     watch(
       reqParams,
       () => {
         findGoodsCommentList(goods.value.id, reqParams).then(data => {
           commentList.value = data.result.items
+          total.value = data.result.counts
         })
       },
       { immediate: true }
@@ -157,6 +165,12 @@ export default {
     const formatNickName = nickName => {
       return nickName.substr(0, 1) + '****' + nickName.substr(-1)
     }
+
+    // 实现分页切换
+    const changePagerFn = newPage => {
+      reqParams.page = newPage
+    }
+
     return {
       commentInfo,
       currentTagIndex,
@@ -165,10 +179,11 @@ export default {
       commentList,
       changeSort,
       formatSpecs,
-      formatNickName
+      formatNickName,
+      total,
+      changePagerFn
     }
-  },
-  components: { GoodsCommentImage, XtxPagination }
+  }
 }
 </script>
 

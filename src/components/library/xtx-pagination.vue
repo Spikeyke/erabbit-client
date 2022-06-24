@@ -1,10 +1,12 @@
 <template>
   <div class="xtx-pagination">
-    <a @click="myCurrentPage--" v-if="myCurrentPage > 1" href="javascript:;">上一页</a>
+    <a @click="changePager(myCurrentPage - 1)" v-if="myCurrentPage > 1" href="javascript:;"
+      >上一页</a
+    >
     <a v-else href="javascript:;" class="disabled">上一页</a>
     <span v-if="pager.start > 1">...</span>
     <a
-      @click="myCurrentPage = i"
+      @click="changePager(i)"
       href="javascript:;"
       v-for="i in pager.btnArr"
       :key="i"
@@ -12,18 +14,35 @@
       >{{ i }}</a
     >
     <span v-if="pager.end < pager.pageCount">...</span>
-    <a @click="myCurrentPage++" v-if="myCurrentPage < pager.pageCount" href="javascript:;"
+    <a
+      @click="changePager(myCurrentPage + 1)"
+      v-if="myCurrentPage < pager.pageCount"
+      href="javascript:;"
       >下一页</a
     >
     <a v-else href="javascript:;" class="disabled">下一页</a>
   </div>
 </template>
 <script>
-import { ref } from '@vue/reactivity'
-import { computed } from '@vue/runtime-core'
+import { ref } from 'vue'
+import { computed, watch } from '@vue/runtime-core'
 export default {
   name: 'XtxPagination',
-  setup() {
+  props: {
+    total: {
+      type: Number,
+      default: 100
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    }
+  },
+  setup(props, { emit }) {
     // 需要数据：
     // 1、约定按钮的个数5个，如果成为动态的需要设置响应式数据
     const count = 5
@@ -58,8 +77,23 @@ export default {
       // 提供计算属性数据
       return { pageCount, btnArr, start, end }
     })
-
-    return { myCurrentPage, pager }
+    // 监听props的变化，更新组件内部数据
+    watch(
+      props,
+      () => {
+        myTotal.value = props.total
+        myPageSize.value = props.pageSize
+        myCurrentPage.value = props.currentPage
+      },
+      { immediate: true }
+    )
+    // 切换分页函数
+    const changePager = page => {
+      myCurrentPage.value = page
+      // 通知父组件
+      emit('current-change', page)
+    }
+    return { myCurrentPage, pager, changePager }
   }
 }
 </script>
