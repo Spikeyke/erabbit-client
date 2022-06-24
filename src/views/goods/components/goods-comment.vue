@@ -72,6 +72,8 @@
         </div>
       </div>
     </div>
+    <!-- 分页组件 -->
+    <XtxPagination />
   </div>
 </template>
 
@@ -81,6 +83,7 @@ import { inject, watch } from '@vue/runtime-core'
 import { findGoodsCommentInfo } from '@/api/product'
 import { findGoodsCommentList } from '@/api/product'
 import GoodsCommentImage from './goods-comment-image.vue'
+import XtxPagination from '@/components/library/xtx-pagination.vue'
 export default {
   name: 'GoodsComment',
   components: { GoodsCommentImage },
@@ -165,7 +168,7 @@ export default {
       formatNickName
     }
   },
-  components: { GoodsCommentImage }
+  components: { GoodsCommentImage, XtxPagination }
 }
 </script>
 

@@ -14,9 +14,6 @@ module.exports = {
     'vue'
   ],
   rules: {
-    "invalid-first-character-of-tag-name": false,
-    'vue/no-parsing-error': [2, {
-      "x-invalid-end-tag": false
-    }]
+
   }
 }

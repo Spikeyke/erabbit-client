@@ -34,8 +34,8 @@ export default {
     findGoodsHot({ id: route.params.id, type: props.type }).then(data => {
       goodsList.value = data.result
     })
-    
-    return { title,goodsList }
+
+    return { title, goodsList }
   }
 }
 </script>
@@ -52,7 +52,7 @@ export default {
     margin-bottom: 10px;
     font-weight: normal;
   }
-  ::v-deep .goods-item {
+  :deep(.goods-item) {
     background: #fff;
     width: 100%;
     margin-bottom: 10px;

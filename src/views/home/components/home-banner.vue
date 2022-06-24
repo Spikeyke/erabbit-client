@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {findBanner} from '@/api/home'
+import { findBanner } from '@/api/home'
 import { ref } from 'vue'
 export default {
   name: 'HomeBanner',
@@ -31,10 +31,10 @@ export default {
 }
 // 覆盖样式
 .xtx-carousel {
-  ::v-deep .carousel-btn.prev {
+  :deep(.carousel-btn.prev) {
     left: 270px;
   }
-  ::v-deep .carousel-indicator {
+  :deep(.carousel-indicator) {
     padding-left: 250px;
   }
 }
