@@ -4,12 +4,12 @@
       <ul>
         <template v-if="profile.token">
           <li>
-            <a href="javascript:;"><i class="iconfont icon-user"></i>{{profile.account}}</a>
+            <a href="javascript:;"><i class="iconfont icon-user"></i>{{ profile.account }}</a>
           </li>
           <li><a href="javascript:;">退出登录</a></li>
         </template>
         <template v-else>
-          <li><a href="javascript:;">请先登录</a></li>
+          <li><RouterLink to="/login">请先登录</RouterLink></li>
           <li><a href="javascript:;">免费注册</a></li>
         </template>
         <li><a href="javascript:;">我的订单</a></li>
@@ -24,16 +24,16 @@
   </nav>
 </template>
 <script>
-import {computed} from 'vue'
+import { computed } from 'vue'
 // 使用vuex中的state需要设置计算属性
-import {useStore} from 'vuex'
+import { useStore } from 'vuex'
 export default {
   name: 'AppTopnav',
   setup() {
     // 获取用户的登录信息，才能控制切换导航菜单
     const store = useStore()
-    const profile=computed(()=>{
-        return store.state.user.profile
+    const profile = computed(() => {
+      return store.state.user.profile
     })
     return { profile }
   }

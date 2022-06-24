@@ -4,6 +4,7 @@ const Home = () => import('@/views/home')
 const TopCategory = () => import('@/views/category/index')
 const SubCategory = () => import('@/views/category/sub')
 const Goods = () => import('@/views/goods/index')
+const Login = () => import('@/views/login/index')
 
 // 路由规则
 const routes = [
@@ -18,7 +19,8 @@ const routes = [
       { path: '/category/sub/:id', component: SubCategory },
       { path: '/product/:id', component: Goods }
     ]
-  }
+  },
+  { path: '/login', component: Login }
 ]
 
 // vue2.0 new VueRouter({}) 创建路由实例
