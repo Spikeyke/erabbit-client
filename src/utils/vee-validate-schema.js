@@ -12,6 +12,7 @@ export default {
         if (!value) return '请输入密码'
         // 规则：密码格式6-24个字符
         if (!/^\w{6,24}$/.test(value)) return '密码格式6-24个字符'
+        return true
     },
     mobile(value) {
         if (!value) return '请输入手机号'
