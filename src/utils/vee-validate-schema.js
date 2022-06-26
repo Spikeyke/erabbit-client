@@ -17,7 +17,7 @@ export default {
     mobile(value) {
         if (!value) return '请输入手机号'
         // 规则：1开头 3-9 之间 9个数字
-        if (!/^[3-9]\d{9}$/.test(value)) return '手机号格式不对'
+        if (!/^1[3-9]\d{9}$/.test(value)) return '手机号格式不对'
         return true
     },
     code(value) {

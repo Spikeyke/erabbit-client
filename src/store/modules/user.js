@@ -14,10 +14,10 @@ export default {
             }
         }
     },
-    mutations:{
+    mutations: {
         //修改用户信息，payload就是用户信息对象
-        setUser(state,payload){
-            state.profile=payload
+        setUser(state, payload) {
+            state.profile = payload
         }
     }
 }
