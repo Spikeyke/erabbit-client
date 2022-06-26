@@ -30,3 +30,13 @@ export const userMobileLoginMsg = (mobile) => {
 export const userMobileLogin = ({ mobile, code }) => {
     return request('/login/code', 'post', { mobile, code })
 }
+
+
+/* 
+    @param {String} unionId - QQ唯一标识，openId
+    @param {*} source - 客户端类型 PC为1
+    @returns
+*/
+export const userQQLogin = (unionId, source = 1) => {
+    return request('/login/social', 'post', { unionId, source })
+}
