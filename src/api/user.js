@@ -95,3 +95,6 @@ export const userQQPatchCode = (mobile) => {
 export const userQQPatchLogin = ({ unionId, mobile, code, account, password }) => {
     return request(`/login/social/${unionId}/complement`, 'post', { unionId, mobile, code, account, password })
 }
+
+// 解绑接口
+// http://pcapi-xiaotuxian-front-devtest.itheima.net/login/social/unbind?mobile=手机号
