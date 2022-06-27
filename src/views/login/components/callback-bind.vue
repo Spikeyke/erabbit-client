@@ -1,7 +1,7 @@
 <template>
     <Form ref="formCom" :validation-schema="mySchema" v-slot="{ errors }" autocomplete="off" class="xtx-form">
         <div class="user-info">
-            <img src="http://qzapp.qlogo.cn/qzapp/101941968/57C7969540F9D3532451374AA127EE5B/50" alt="" />
+            <img :src="avatar" alt="" />
             <p>Hi，{{ nickname }} 欢迎来小兔鲜，完成绑定后可以QQ账号一键登录哦~</p>
         </div>
         <div class="xtx-form-item">
@@ -54,7 +54,7 @@ export default {
         const avatar = ref('null')
         if (QC.Login.check()) {
             QC.api('get_user_info').success(res => {
-                nickname.value = red.data.figureurl_1
+                avatar.value = res.data.figureurl_qq_1
                 nickname.value = res.data.nickname
             })
         }

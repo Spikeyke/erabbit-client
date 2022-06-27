@@ -22,7 +22,7 @@ export default {
             state.profile = payload
         },
         // 修改回跳地址
-        serRedirectUrl(state, url) {
+        setRedirectUrl(state, url) {
             state.redirectUrl = url
         }
     }
