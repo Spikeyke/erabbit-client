@@ -39,7 +39,7 @@
                                     <div>
                                         <p class="name ellipsis">{{ goods.name }}</p>
                                         <!-- 选择规格组件 -->
-                                        <CartSku :attrsText="goods.attrsText" />
+                                        <CartSku :skuId="goods.skuId" :attrsText="goods.attrsText" />
                                     </div>
                                 </div>
                             </td>

@@ -5,42 +5,58 @@
             <i class="iconfont icon-angle-down"></i>
         </div>
         <div class="layer" v-if="visible">
-            <div class="loading"></div>
+            <div v-if="loading" class="loading"></div>
+            <GoodsSku :skuId="skuId" v-else :goods="goods" />
+            <XtxButton v-if="!loading" size="mini" type="primary" @click="submit()">确认</XtxButton>
         </div>
     </div>
 </template>
 <script>
 import { ref } from '@vue/reactivity'
 import { onClickOutside } from '@vueuse/core'
+import { getGoodsSku } from '@/api/cart'
+import GoodsSku from '@/views/goods/components/goods-sku.vue'
 export default {
-    name: 'CartSku',
+    name: "CartSku",
+    components: { GoodsSku },
     props: {
         attrsText: {
             type: String,
-            default: ''
+            default: ""
+        },
+        skuId: {
+            type: String,
+            default: ""
         }
     },
-    setup() {
-        const visible = ref(false)
+    setup(props) {
+        const visible = ref(false);
+        const goods = ref(null);
+        const loading = ref(false)
         // 打开
         const open = () => {
-            visible.value = true
-        }
+            visible.value = true;
+            // 获取商品数据(specs,skus)
+            loading.value = true
+            getGoodsSku(props.skuId).then(data => {
+                goods.value = data.result;
+                loading.value = false
+            });
+        };
         // 关闭
         const close = () => {
-            visible.value = false
-        }
+            visible.value = false;
+        };
         // 切换
         const toggle = () => {
-            visible.value ? close() : open()
-        }
+            visible.value ? close() : open();
+        };
         // 点击其他地方关闭
-        const target = ref(null)
+        const target = ref(null);
         onClickOutside(target, () => {
-            close()
-        })
-
-        return { visible, toggle, target }
+            close();
+        });
+        return { visible, toggle, target, goods, loading };
     }
 }
 </script>
