@@ -114,6 +114,12 @@ export default {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
                     // 单条删除payload 现在 就是skuId
+                    this.deleteCart([payload]).then(() => {
+                        return this.findCart()
+                    }).then(data => {
+                        ctx.commit('setCart', data.result)
+                        resolve()
+                    })
                 } else {
                     // 未登录
                     ctx.commit('deleteCart', payload)
