@@ -36,7 +36,7 @@
                                 </div>
                             </td>
                             <td class="tc">
-                                <p>&yen;{{ goods.nowPrice }}/p>
+                                <p>&yen;{{ goods.nowPrice }}</p>
                                 <p v-if="goods.price - goods.nowPrice">比加入时降价
                                     <span class="red">&yen;
                                         {{ goods.price - goods.nowPrice }}

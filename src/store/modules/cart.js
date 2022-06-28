@@ -40,7 +40,7 @@ export default {
             return getters.selectedList.reduce((p, c) => p + Math.round(c.count * 100) * c.nowPrice, 0) / 100
         },
         // 是否全选
-        isCheckAll() {
+        isCheckAll(state, getters) {
             return getters.selectedList.length !== 0 && getters.selectedList.length === getters.validList.length
         }
     },
