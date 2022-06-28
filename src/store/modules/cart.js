@@ -82,6 +82,20 @@ export default {
         }
     },
     actions: {
+        // 全选与取消全选
+        checkAllCart(ctx, selected) {
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+
+                } else {
+                    // 未登录
+                    ctx.getters.validList.forEach(goods => {
+                        ctx.commit('updateCart', { skuId: goods.skuId, selected })
+                    })
+                    resolve()
+                }
+            })
+        },
         // 修改购物车（选中状态，数量）
         updateCart(ctx, payload) {
             // payload 需要：必须有skuId 可能Lselected count
