@@ -54,9 +54,27 @@ export default {
                     updateGoods[key] = goods[key]
                 }
             }
+        },
+        // 删除购物车商品
+        deleteCart(state, skuId) {
+            const index = state.list.findIndex(item => item.skuId === skuId)
+            state.list.splice(index, 1)
         }
     },
     actions: {
+        // 删除购物车
+        deleteCart(ctx, payload) {
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+                    // 单条删除payload 现在 就是skuId
+                } else {
+                    // 未登录
+                    ctx.commit('deleteCart', payload)
+                    resolve()
+                }
+            })
+
+        },
         // 加入购物车
         insertCart(ctx, payload) {
             return new Promise((resolve, reject) => {
