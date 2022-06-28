@@ -70,7 +70,7 @@
                                 <h3 class="tit">失效商品</h3>
                             </td>
                         </tr>
-                        <tr v-for="goods in $store.getters['cart/validList']" :key="goods.skuId">
+                        <tr v-for="goods in $store.getters['cart/invalidList']" :key="goods.skuId">
                             <td>
                                 <XtxCheckbox style="color:#eee;" />
                             </td>
@@ -103,7 +103,7 @@
             <div class="action">
                 <div class="batch">
                     <XtxCheckbox @change="checkAll" :modelValue="$store.getters['cart/isCheckAll']">全选</XtxCheckbox>
-                    <a href=" javascript:;">删除商品</a>
+                    <a @click="batchDeleteCart()" href=" javascript:;">删除商品</a>
                     <a href="javascript:;">移入收藏夹</a>
                     <a href="javascript:;">清空失效商品</a>
                 </div>
@@ -145,7 +145,13 @@ export default {
                 })
             }).catch(e => { })
         }
-        return { checkOne, checkAll, deleteCart }
+        // 批量删除选中商品
+        const batchDeleteCart = () => {
+            Confirm({ text: '是否确认删除选中商品' }).then(() => {
+                store.dispatch('cart/batchDeleteCart')
+            }).catch(e => { })
+        }
+        return { checkOne, checkAll, deleteCart, batchDeleteCart }
     }
 }
 </script>
