@@ -82,6 +82,19 @@ export default {
         }
     },
     actions: {
+        // 修改购物车（选中状态，数量）
+        updateCart(ctx, payload) {
+            // payload 需要：必须有skuId 可能Lselected count
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+
+                } else {
+                    // 未登录
+                    ctx.commit('updateCart', payload)
+                    resolve()
+                }
+            })
+        },
         // 删除购物车
         deleteCart(ctx, payload) {
             return new Promise((resolve, reject) => {
