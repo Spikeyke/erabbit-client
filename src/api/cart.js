@@ -66,3 +66,12 @@ export const deleteCart = (ids) => {
 export const updateCart = ({ skuId, selected, count }) => {
     return request(`/member/cart/${skuId}`, 'put', { selected, count })
 }
+
+/* 
+    全选与反选
+    @param {Boolean} selected - 选中状态
+    @param {Array<String>} ids - skuId的集合
+*/
+export const checkAllCart = ({ selected, ids }) => {
+    return request('/member/cart/selected', 'put', { selected, ids })
+}
