@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style scoped lang='less'>
 .login-header {
   background: #fff;
   border-bottom: 1px solid #e4e4e4;

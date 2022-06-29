@@ -39,9 +39,9 @@ export default {
       return store.state.user.profile
     })
 
-    //退出登录
-    // 1、清空本地存储信息和vuex的用户信息
-    // 2、跳转登录
+    // 退出登录
+    // 1. 清空本地存储信息和vuex的用户信息
+    // 2. 跳转登录
     const router = useRouter()
     const logout = () => {
       store.commit('user/setUser', {})

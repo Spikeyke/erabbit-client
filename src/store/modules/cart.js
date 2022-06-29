@@ -1,4 +1,4 @@
-import { getNewCartGoods, mergeCart } from "@/api/cart"
+import { getNewCartGoods, mergeCart, findCart } from "@/api/cart"
 
 // 购物车模块
 export default {
@@ -80,17 +80,17 @@ export default {
             const index = state.list.findIndex(item => item.skuId === skuId)
             state.list.splice(index, 1)
         },
-        // 设置购物车
+        // 设置购物车列表
         setCart(state, payload) {
-            // payload 为空数组，清空 为有值数组，设置
+            // payload 为空数组，清空。为有值数组，设置。
             state.list = payload
         }
     },
     actions: {
         // 合并购物车
         async mergeCart(ctx) {
+            // 准备合并的参数
             const cartList = ctx.state.list.map(goods => {
-                // 准备合并的参数
                 return {
                     skuId: goods.skuId,
                     selected: goods.selected,
@@ -168,13 +168,7 @@ export default {
         deleteCart(ctx, payload) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-                    // 单条删除payload 现在 就是skuId
-                    // this.deleteCart([payload]).then(() => {
-                    //     return this.findCart()
-                    // }).then(data => {
-                    //     ctx.commit('setCart', data.result)
-                    //     resolve()
-                    // })
+                    // TODO已登录
                 } else {
                     // 未登录
                     ctx.commit('deleteCart', payload)
@@ -200,16 +194,21 @@ export default {
         findCart(ctx) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-                    // TODO已登录
+                    // 已登录
+                    // findCart().then(data => {
+                    //     ctx.commit('setCart', data.result)
+                    //     resolve()
+                    // })
                 } else {
-                    // 未登陆
-                    // 同时发送请求（有几个商品发几个请求）等所有请求成功，一并去修改本地数据
-                    // Promise.all(promise数组).then((dataList)=>{}) 同时发送请求，所有请求成功，得到所有成功结果
-                    // Promise.race(promise数组).then((data)=>{}) 同时发送请求，最快的请求成功，得到成功结果
+                    // 未登录
+                    // 同时发送请求（有几个商品发几个请求）等所有请求成功，一并去修改本地数据。
+                    // Promise.all(promise数组).then((dataList)=>{})  同时发请求，所有请求成功，得到所有成功结果
+                    // Promise.resolve() Promise.reject() new Promise()
+                    // Promise.race(promise数组).then((data)=>{}) 同时发请求，最快的请求成功，得到成功结果
                     const promiseArr = ctx.state.list.map(goods => {
                         return getNewCartGoods(goods.skuId)
                     })
-                    // dataList 成功结果的集合，数据顺序和promiseArr顺序一致，它又是根据state.list而来
+                    // dataList成功结果的集合，数据顺序和promiseArr顺序一致，它又是根据state.list而来
                     Promise.all(promiseArr).then(dataList => {
                         // 更新本地购物车
                         dataList.forEach((data, i) => {
