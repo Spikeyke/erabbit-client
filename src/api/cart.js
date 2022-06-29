@@ -47,3 +47,11 @@ export const findCart = () => {
 export const insertCart = ({ skuId, count }) => {
     return request('/member/cart', 'post', { skuId, count })
 }
+
+/* 
+    删除购物车商品，支持批量
+    @param {Array<string>} ids -skuId的集合
+*/
+export const deleteCart = (ids) => {
+    return request('/member/cart', 'delete', { ids })
+}
