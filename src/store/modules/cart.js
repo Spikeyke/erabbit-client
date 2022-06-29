@@ -1,4 +1,4 @@
-import { getNewCartGoods, mergeCart, findCart, insertCart, deleteCart } from "@/api/cart"
+import { getNewCartGoods, mergeCart, findCart, insertCart, deleteCart, updateCart } from "@/api/cart"
 
 // 购物车模块
 export default {
@@ -106,6 +106,7 @@ export default {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
                     // TODO已登录
+
                 } else {
                     // 未登录
                     // 1、找出旧的商品信息
@@ -164,6 +165,12 @@ export default {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
                     // TODO已登录
+                    updateCart(payload).then(() => {
+                        return findCart()
+                    }).then(data => {
+                        ctx.commit('setCart', data.result)
+                        resolve()
+                    })
                 } else {
                     // 未登录
                     ctx.commit('updateCart', payload)
