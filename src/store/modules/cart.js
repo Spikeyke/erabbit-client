@@ -56,7 +56,7 @@ export default {
             const sameIndex = state.list.findIndex(goods => goods.skuId === payload.skuId)
             if (sameIndex > -1) {
                 const count = state.list[sameIndex].count
-                pauload.count += count
+                payload.count += count
                 // 删除原来
                 state.list.splice(sameIndex, 1)
             }
@@ -82,11 +82,31 @@ export default {
         }
     },
     actions: {
+        // 修改规格
+        updateCartSku(ctx, { oldSkuId, newSku }) {
+            return new Promise((resolve, reject) => {
+                if (ctx.rootState.user.profile.token) {
+                    // TODO已登录
+                } else {
+                    // 未登录
+                    // 1、找出旧的商品信息
+                    // 2、删除旧的商品数据
+                    // 3、根据新的sku信息和旧的商品信息，合并成一条新的购物车商品数据
+                    // 4、添加新的商品
+                    const oldGoods = ctx.state.list.find(item => item.skuId === oldSkuId)
+                    ctx.commit('deleteCart', oldSkuId)
+                    const { skuId, price: nowPrice, specsText: attrsText, inventory: stock } = newSku
+                    const newGoods = { ...oldGoods, skuId, nowPrice, attrsText, stock }
+                    ctx.commit('insertCart', newGoods)
+                    resolve()
+                }
+            })
+        },
         // 批量删除
         batchDeleteCart(ctx, isClear) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-
+                    // TODO已登录
                 } else {
                     // 未登录
                     // 找出选中的商品列表，遍历调用删除的mutations
@@ -102,7 +122,7 @@ export default {
         checkAllCart(ctx, selected) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-
+                    // TODO已登录
                 } else {
                     // 未登录
                     ctx.getters.validList.forEach(goods => {
@@ -117,7 +137,7 @@ export default {
             // payload 需要：必须有skuId 可能Lselected count
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-
+                    // TODO已登录
                 } else {
                     // 未登录
                     ctx.commit('updateCart', payload)
@@ -148,7 +168,7 @@ export default {
         insertCart(ctx, payload) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-                    // 已登录
+                    // TODO已登录
 
                 } else {
                     // 未登录
@@ -161,7 +181,7 @@ export default {
         findCart(ctx) {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
-                    // 已登陆
+                    // TODO已登录
                 } else {
                     // 未登陆
                     // 同时发送请求（有几个商品发几个请求）等所有请求成功，一并去修改本地数据

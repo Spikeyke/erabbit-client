@@ -6,8 +6,8 @@
         </div>
         <div class="layer" v-if="visible">
             <div v-if="loading" class="loading"></div>
-            <GoodsSku :skuId="skuId" v-else :goods="goods" />
-            <XtxButton v-if="!loading" size="mini" type="primary" @click="submit()">确认</XtxButton>
+            <GoodsSku @change="changeSku" :skuId="skuId" v-else :goods="goods" />
+            <XtxButton @click="submit" v-if="!loading" size="mini" type="primary">确认</XtxButton>
         </div>
     </div>
 </template>
@@ -29,7 +29,7 @@ export default {
             default: ""
         }
     },
-    setup(props) {
+    setup(props, { emit }) {
         const visible = ref(false);
         const goods = ref(null);
         const loading = ref(false)
@@ -56,7 +56,23 @@ export default {
         onClickOutside(target, () => {
             close();
         });
-        return { visible, toggle, target, goods, loading };
+
+        // 监听sku改变的函数，激励sku信息
+        const currSku = ref(null)
+        const changeSku = (sku) => {
+            currSku.value = sku
+        }
+
+        // 点击确认的时候，更改后的sku信息提交给父组件（购物车组件）
+        const submit = () => {
+            // 当你currSku有值，且skuId和默认的skuId不同
+            if (currSku.value && currSku.value.skuId && currSku.value.skuId !== props.skuId) {
+                emit('change', currSku.value)
+                close()
+            }
+        }
+
+        return { visible, toggle, target, goods, loading, changeSku, submit };
     }
 }
 </script>
