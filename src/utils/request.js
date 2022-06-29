@@ -24,7 +24,7 @@ instance.interceptors.request.use(config => {
     // 2、判断是否有token
     if (profile.token) {
         // 3、设置token
-        config.headersAuthorization = `Bearer ${profile.token}`
+        config.headers.Authorization = `Bearer ${profile.token}`
     }
     return config
 }, err => {
