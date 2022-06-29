@@ -1,4 +1,4 @@
-import { getNewCartGoods, mergeCart, findCart } from "@/api/cart"
+import { getNewCartGoods, mergeCart, findCart, insertCart } from "@/api/cart"
 
 // 购物车模块
 export default {
@@ -182,7 +182,12 @@ export default {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
                     // TODO已登录
-
+                    insertCart({ skuId: payload.skuId, count: payload.count }).then(() => {
+                        return findCart()
+                    }).then(data => {
+                        ctx.commit('setCart', data.result)
+                        resolve()
+                    })
                 } else {
                     // 未登录
                     ctx.commit('insertCart', payload)
@@ -195,10 +200,10 @@ export default {
             return new Promise((resolve, reject) => {
                 if (ctx.rootState.user.profile.token) {
                     // 已登录
-                    // findCart().then(data => {
-                    //     ctx.commit('setCart', data.result)
-                    //     resolve()
-                    // })
+                    findCart().then(data => {
+                        ctx.commit('setCart', data.result)
+                        resolve()
+                    })
                 } else {
                     // 未登录
                     // 同时发送请求（有几个商品发几个请求）等所有请求成功，一并去修改本地数据。

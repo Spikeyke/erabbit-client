@@ -37,3 +37,13 @@ export const mergeCart = (cartList) => {
 export const findCart = () => {
     return request('/member/cart', 'get')
 }
+
+
+/* 
+    加入购物车
+    @param {String} skuId SKUID
+    @param {String} count 加入购物车数量
+*/
+export const insertCart = ({ skuId, count }) => {
+    return request('/member/cart', 'post', { skuId, count })
+}
