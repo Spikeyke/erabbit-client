@@ -8,13 +8,24 @@
         <i class="iconfont icon-msg"></i> 使用短信登录
       </a>
     </div>
-    <Form ref="formCom" class="form" :validation-schema="schema" v-slot="{ errors }" autocomplete="off">
+    <Form
+      ref="formCom"
+      class="form"
+      :validation-schema="schema"
+      v-slot="{ errors }"
+      autocomplete="off"
+    >
       <template v-if="!isMsgLogin">
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <Field :class="{ error: errors.account }" v-model="form.account" name="account" type="text"
-              placeholder="请输入用户名" />
+            <Field
+              :class="{ error: errors.account }"
+              v-model="form.account"
+              name="account"
+              type="text"
+              placeholder="请输入用户名"
+            />
           </div>
           <div class="error" v-if="errors.account">
             <i class="iconfont icon-warning" />
@@ -24,8 +35,13 @@
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-lock"></i>
-            <Field :class="{ error: errors.password }" v-model="form.password" name="password" type="password"
-              placeholder="请输入密码" />
+            <Field
+              :class="{ error: errors.password }"
+              v-model="form.password"
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+            />
           </div>
           <div class="error" v-if="errors.password">
             <i class="iconfont icon-warning" />
@@ -37,8 +53,13 @@
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-user"></i>
-            <Field :class="{ error: errors.mobile }" v-model="form.mobile" name="mobile" type="text"
-              placeholder="请输入手机号" />
+            <Field
+              :class="{ error: errors.mobile }"
+              v-model="form.mobile"
+              name="mobile"
+              type="text"
+              placeholder="请输入手机号"
+            />
           </div>
           <div class="error" v-if="errors.mobile">
             <i class="iconfont icon-warning" />
@@ -48,7 +69,13 @@
         <div class="form-item">
           <div class="input">
             <i class="iconfont icon-code"></i>
-            <Field :class="{ error: errors.code }" v-model="form.code" name="code" type="text" placeholder="请输入验证码" />
+            <Field
+              :class="{ error: errors.code }"
+              v-model="form.code"
+              name="code"
+              type="text"
+              placeholder="请输入验证码"
+            />
             <span @click="send()" class="code">
               {{ time === 0 ? '发送验证码' : `${time}秒后发送` }}
             </span>
@@ -76,8 +103,12 @@
     </Form>
     <div class="action">
       <a
-        href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback">
-        <img src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png" alt="">
+        href="https://graph.qq.com/oauth2.0/authorize?client_id=100556005&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fwww.corho.com%3A8080%2F%23%2Flogin%2Fcallback"
+      >
+        <img
+          src="https://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_7.png"
+          alt=""
+        />
       </a>
       <div class="url">
         <a href="javascript:;">忘记密码</a>
@@ -190,12 +221,16 @@ export default {
     // pause 暂停 resume 开始
     // useIntervalFn(回调函数,执行间隔,是否立即开启)
     const time = ref(0)
-    const { pause, resume } = useIntervalFn(() => {
-      time.value--
-      if (time.value <= 0) {
-        pause()
-      }
-    }, 1000, false)
+    const { pause, resume } = useIntervalFn(
+      () => {
+        time.value--
+        if (time.value <= 0) {
+          pause()
+        }
+      },
+      1000,
+      false
+    )
     onUnmounted(() => {
       pause()
     })
@@ -258,7 +293,7 @@ export default {
         position: relative;
         height: 36px;
 
-        >i {
+        > i {
           width: 34px;
           height: 34px;
           background: #cfcdcd;
@@ -303,7 +338,7 @@ export default {
         }
       }
 
-      >.error {
+      > .error {
         position: absolute;
         font-size: 12px;
         line-height: 28px;
