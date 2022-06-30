@@ -1,7 +1,7 @@
 <template>
   <div class="xtx-city" ref="target">
     <div class="select" @click="toggle()" :class="{ active: visible }">
-      <span v-if="!fullLocation" class="placeholder">请选择配送地址</span>
+      <span v-if="!fullLocation" class="placeholder">{{ placeholder }}</span>
       <span v-else class="value">{{ fullLocation }}</span>
       <i class="iconfont icon-angle-down"></i>
     </div>
@@ -20,21 +20,25 @@
   </div>
 </template>
 <script>
-import { reactive, ref } from '@vue/reactivity'
+import { computed, reactive, ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import axios from 'axios'
-import { computed } from '@vue/runtime-core'
 export default {
   name: 'XtxCity',
   props: {
     fullLocation: {
       type: String,
       default: ''
+    },
+    placeholder: {
+      type: String,
+      defulat: '请选择配送地址'
     }
   },
   setup(props, { emit }) {
     // 显示隐藏数据
     const visible = ref(false)
+
     // 所有省市区数据
     const allCityData = ref([])
     // 正在加载数据
@@ -64,7 +68,7 @@ export default {
     // 实现点击组件外部元素进行关闭操作
     const target = ref(null)
     onClickOutside(target, () => {
-      // 参数1：监听哪个元素
+      // 参数1：监听那个元素
       // 参数2：点击了该元素外的其他地方触发的函数
       close()
     })
@@ -90,11 +94,11 @@ export default {
       provinceName: '',
       cityCode: '',
       cityName: '',
-      countryCOde: '',
-      countryName: '',
+      countyCode: '',
+      countyName: '',
       fullLocation: ''
     })
-    // 当点击按钮
+    // 当你点击按钮的时候记录
     const changeItem = item => {
       if (item.level === 0) {
         // 省
@@ -108,32 +112,25 @@ export default {
       }
       if (item.level === 2) {
         // 地区
-        changeResult.countryCode = item.code
-        changeResult.countryName = item.name
+        changeResult.countyCode = item.code
+        changeResult.countyName = item.name
         // 完整路径
-        changeResult.fullLocation = `${changeResult.provinceName} ${changeResult.cityName} ${changeResult.countryName}`
-        // 这是最后一级关闭对话框，通知父组件数据
+        changeResult.fullLocation = `${changeResult.provinceName} ${changeResult.cityName} ${changeResult.countyName}`
+        // 这是最后一级，选完了，关闭对话框，通知父组件数据
         close()
-
         emit('change', changeResult)
       }
     }
-    // 城市选中事件处理函数
-    const changeCity = result => {
-      provinceCode.value = result.provinceCode
-      cityCode.value = result.cityCode
-      countryCode.value = result.countryCode
-      fullLocation.value = result.fullLocationCode
-    }
+
     return { visible, toggle, target, loading, currList, changeItem }
   }
 }
 // 获取省市区数据函数
 const getCityData = () => {
   // 数据：https://yjy-oss-files.oss-cn-zhangjiakou.aliyuncs.com/tuxian/area.json
-  // 1、当本地没有缓存，发请求获取数据
-  // 2、当本地有缓存，取出本地数据
-  // 返回promise在then中获取数据，这里可能是异步操作可能是同步操作
+  // 1. 当本地没有缓存，发请求获取数据
+  // 2. 当本地缓存，取出本地数据
+  // 返回promise在then获取数据，这里可能是异步操作可能是同步操作
   return new Promise((resolve, reject) => {
     // 约定：数据存储在window上的cityData字段
     if (window.cityData) {
@@ -149,7 +146,7 @@ const getCityData = () => {
   })
 }
 </script>
-<style lang="less" scoped>
+<style scoped lang="less">
 .xtx-city {
   display: inline-block;
   position: relative;

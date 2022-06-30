@@ -1,25 +1,28 @@
 <template>
   <div class="checkout-address">
     <div class="text">
-      <div class="none">您需要先添加收货地址才可提交订单。</div>
+      <div v-if="!showAddress" class="none">您需要先添加收货地址才可提交订单。</div>
       <ul v-if="showAddress">
         <li>
-          <span>收<i />货<i />人：</span>{{ showAddress.recetver }}
+          <span>收<i />货<i />人：</span>{{ showAddress.receiver }}
         </li>
         <li>
           <span>联系方式：</span
-          >{{ showAddress.contact.replace(/^(\d{3})\d{4}(\d{4})/, '$1****$2') }}
+          >{{ showAddress.contact.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2') }}
         </li>
-        <li><span>收货地址：</span>{{ showAddress.fullLocation }}{{ showAddress.address }}</li>
+        <li>
+          <span>收货地址：</span>{{ showAddress.fullLocation.replace(/ /g, '')
+          }}{{ showAddress.address }}
+        </li>
       </ul>
-      <a href="javascript:;">修改地址</a>
+      <a @click="openAddressEdit(showAddress)" v-if="showAddress" href="javascript:;">修改地址</a>
     </div>
     <div class="action">
       <XtxButton @click="openDialog()" class="btn">切换地址</XtxButton>
-      <XtxButton class="btn">添加地址</XtxButton>
+      <XtxButton @click="openAddressEdit({})" class="btn">添加地址</XtxButton>
     </div>
   </div>
-  <!-- 对话框组件 -->
+  <!-- 对话框组件-切换收货地址 -->
   <XtxDialog title="切换收货地址" v-model:visible="visibleDialog">
     <div
       @click="selectedAddress = item"
@@ -33,18 +36,20 @@
           <span>收<i />货<i />人：</span>{{ item.receiver }}
         </li>
         <li>
-          <span>联系方式：</span>{{ item.contact.replace(/^(\d{3})\d{4}(\d{4})/, '$1****$2') }}
+          <span>联系方式：</span>{{ item.contact.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2') }}
         </li>
         <li><span>收货地址：</span>{{ item.fullLocation.replace(/ /g, '') + item.address }}</li>
       </ul>
     </div>
     <template #footer>
-      <xtx-button @click="visibleDialog = false" type="gray" style="margin-right: 20px"
-        >取消</xtx-button
+      <XtxButton @click="visibleDialog = false" type="gray" style="margin-right: 20px"
+        >取消</XtxButton
       >
-      <xtx-button @click="confirmAddressFn" type="primary">确认</xtx-button>
+      <XtxButton @click="confirmAddressFn" type="primary">确认</XtxButton>
     </template>
   </XtxDialog>
+  <!-- 收货地址添加编辑组件 -->
+  <AddressEdit @on-success="successHandler" ref="addressEditCom" />
 </template>
 <script>
 // vue3.0 v-model:visible 语法糖，拆解 (:visible + @update:visible)
@@ -52,8 +57,9 @@
 import { ref } from '@vue/reactivity'
 import XtxDialog from '@/components/library/xtx-dialog.vue'
 import XtxButton from '@/components/library/xtx-button.vue'
+import AddressEdit from './address-edit.vue'
 export default {
-  components: { XtxDialog, XtxButton },
+  components: { XtxDialog, XtxButton, AddressEdit },
   name: 'CheckoutAddress',
   props: {
     // 收货地址列表
@@ -76,7 +82,7 @@ export default {
       showAddress.value = defaultAddress
     } else {
       if (props.list.length) {
-        showAddress.value = props.list.list[0]
+        showAddress.value = props.list[0]
       }
     }
 
@@ -101,7 +107,31 @@ export default {
       visibleDialog.value = true
     }
 
-    return { showAddress, visibleDialog, selectedAddress, confirmAddressFn, openDialog }
+    // 打开添加编辑收货地址组件
+    const addressEditCom = ref(null)
+    const openAddressEdit = () => {
+      addressEditCom.value.open()
+    }
+
+    const successHandler = formData => {
+      // 如果是添加：往list中追加一条
+      // 当修改formData的时候，数组中的数据也会更新，因为是同一引用地址
+      // 啥时候修改formData，当打开对话框需要清空之前的输入信息
+      // 拷贝formData数据
+      const jsonStr = JSON.stringify(formData)
+      props.list.unshift(JSON.parse(jsonStr))
+    }
+
+    return {
+      showAddress,
+      visibleDialog,
+      selectedAddress,
+      confirmAddressFn,
+      openDialog,
+      openAddressEdit,
+      addressEditCom,
+      successHandler
+    }
   }
 }
 </script>
