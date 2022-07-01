@@ -4,7 +4,9 @@
       <ul>
         <template v-if="profile.token">
           <li>
-            <a href="javascript:;"><i class="iconfont icon-user"></i>{{ profile.account }}</a>
+            <RouterLink to="/member"
+              ><i class="iconfont icon-user"></i>{{ profile.account }}</RouterLink
+            >
           </li>
           <li><a @click="logout()" href="javascript:;">退出登录</a></li>
         </template>
@@ -80,7 +82,7 @@ export default {
         }
       }
 
-      ~li {
+      ~ li {
         a {
           border-left: 2px solid #666;
         }
