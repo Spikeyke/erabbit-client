@@ -3,9 +3,13 @@
     <!-- 概览 -->
     <HomeOverview1 />
     <!-- 收藏 -->
-    <HomePanel title="我的收藏"></HomePanel>
+    <HomePanel title="我的收藏">
+      <GoodsItem v-for="i in 4" :key="i" :goods="goods" />
+    </HomePanel>
     <!-- 足迹 -->
-    <HomePanel title="我的足迹"></HomePanel>
+    <HomePanel title="我的足迹">
+      <GoodsItem v-for="i in 4" :key="i" :goods="goods" />
+    </HomePanel>
     <!-- 猜你 -->
     <GoodsRelevant />
   </div>
@@ -15,12 +19,24 @@
 import HomePanel from './components/home-panel.vue'
 import HomeOverview1 from './components/home-overview.vue'
 import GoodsRelevant from '@/views/goods/components/goods-relevant.vue'
+import GoodsItem from '@/views/category/components/goods-item.vue'
 export default {
   name: 'MemberHome',
   components: {
     HomePanel,
     HomeOverview1,
-    GoodsRelevant
+    GoodsRelevant,
+    GoodsItem
+  },
+  setup() {
+    const goods = {
+      id: '1',
+      name: '自煮火锅不排队 麦饭石不粘鸳鸯火锅',
+      picture: 'https://yanxuan-item.nosdn.127.net/fcdcb840a0f5dd754bb8fd2157579012.jpg',
+      desc: '清汤鲜香 红汤劲爽',
+      price: '159.00'
+    }
+    return { goods }
   }
 }
 </script>
