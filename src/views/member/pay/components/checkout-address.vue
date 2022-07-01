@@ -109,17 +109,25 @@ export default {
 
     // 打开添加编辑收货地址组件
     const addressEditCom = ref(null)
-    const openAddressEdit = () => {
-      addressEditCom.value.open()
+    const openAddressEdit = address => {
+      addressEditCom.value.open(address)
     }
 
     const successHandler = formData => {
-      // 如果是添加：往list中追加一条
-      // 当修改formData的时候，数组中的数据也会更新，因为是同一引用地址
-      // 啥时候修改formData，当打开对话框需要清空之前的输入信息
-      // 拷贝formData数据
-      const jsonStr = JSON.stringify(formData)
-      props.list.unshift(JSON.parse(jsonStr))
+      // 根据formData中的ID去当前地址列表中查找，有就是修改，否则是添加
+      const address = props.list.find(item => item.id === formData.id)
+      if (address) {
+        for (const key in address) {
+          address[key] = formData[key]
+        }
+      } else {
+        // 如果是添加：往list中追加一条
+        // 当修改formData的时候，数组中的数据也会更新，因为是同一引用地址
+        // 啥时候修改formData，当打开对话框需要清空之前的输入信息
+        // 拷贝formData数据
+        const jsonStr = JSON.stringify(formData)
+        props.list.unshift(JSON.parse(jsonStr))
+      }
     }
 
     return {
