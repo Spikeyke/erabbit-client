@@ -30,3 +30,12 @@ export const editAddress = form => {
 export const submitOrder = params => {
   return request('/member/order', 'post', params)
 }
+
+/* 
+  获取订单详情
+  @param {String} orderId 订单ID
+  @returns
+*/
+export const findOrderDetail = orderId => {
+  return request('/member/order/' + orderId, 'get')
+}
