@@ -57,11 +57,7 @@
           size="small"
           >立即付款</XtxButton
         >
-        <XtxButton
-          @click="$router.push(`/member/pay?orderId=${order.id}`)"
-          v-if="order.orderState === 3"
-          type="primary"
-          size="small"
+        <XtxButton @click="$emit('on-confirm', order)" v-if="order.orderState === 3" type="primary" size="small"
           >确认收货</XtxButton
         >
         <p><a @click="$router.push(`/member/order/${order.id}`)" href="javascript:;">查看详情</a></p>
@@ -85,7 +81,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['on-cancel', 'on-delete'],
+  emits: ['on-cancel', 'on-delete', 'on-confirm'],
   setup(props) {
     const { start, timeText } = usePayTime()
     start(props.order.countdown)

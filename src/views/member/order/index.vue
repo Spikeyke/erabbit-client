@@ -9,6 +9,7 @@
       <div v-if="loading" class="loading"></div>
       <div class="none" v-if="!loading && orderList.length === 0">暂无数据</div>
       <OrderItem
+        @on-confirm="handleConfirm"
         @on-delete="handleDelete"
         @on-cancel="handleCancel"
         v-for="item in orderList"
@@ -35,7 +36,7 @@ import XtxTabsPanel from '@/components/library/xtx-tabs-panel.vue'
 import { reactive, ref } from '@vue/reactivity'
 import XtxPagination from '@/components/library/xtx-pagination.vue'
 import OrderItem from './components/order-item.vue'
-import { deleteOrder, findOrderList } from '@/api/order'
+import { confirmOrder, deleteOrder, findOrderList } from '@/api/order'
 import { orderStatus } from '@/api/constants'
 import { watch } from '@vue/runtime-core'
 import OrderCancel from './components/order-cancel.vue'
@@ -93,7 +94,18 @@ export default {
         .catch(() => {})
     }
 
-    return { activeName, orderList, orderStatus, tabClick, loading, total, reqParams, ...useCancel(), handleDelete }
+    return {
+      activeName,
+      orderList,
+      orderStatus,
+      tabClick,
+      loading,
+      total,
+      reqParams,
+      ...useCancel(),
+      handleDelete,
+      ...useConfirm()
+    }
   }
 }
 
@@ -106,6 +118,22 @@ const useCancel = () => {
     orderCancelCom.value.open(order)
   }
   return { handleCancel, orderCancelCom }
+}
+
+// 确认收货逻辑
+const useConfirm = () => {
+  const handleConfirm = order => {
+    Confirm({ text: '确认收货吗？' })
+      .then(() => {
+        confirmOrder(order.id).then(() => {
+          Message({ type: 'success', text: '确认收货成功' })
+          // 待收货--->待评价
+          order.orderState = 4
+        })
+      })
+      .catch(() => {})
+  }
+  return { handleConfirm }
 }
 </script>
 <style lang="less" scoped>
