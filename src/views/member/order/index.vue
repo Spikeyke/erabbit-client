@@ -8,7 +8,13 @@
     <div class="order-list">
       <div v-if="loading" class="loading"></div>
       <div class="none" v-if="!loading && orderList.length === 0">暂无数据</div>
-      <OrderItem @on-cancel="handleCancel" v-for="item in orderList" :key="item.id" :order="item" />
+      <OrderItem
+        @on-delete="handleDelete"
+        @on-cancel="handleCancel"
+        v-for="item in orderList"
+        :key="item.id"
+        :order="item"
+      />
     </div>
     <!-- 分页组件 -->
     <XtxPagination
@@ -29,10 +35,12 @@ import XtxTabsPanel from '@/components/library/xtx-tabs-panel.vue'
 import { reactive, ref } from '@vue/reactivity'
 import XtxPagination from '@/components/library/xtx-pagination.vue'
 import OrderItem from './components/order-item.vue'
-import { findOrderList } from '@/api/order'
+import { deleteOrder, findOrderList } from '@/api/order'
 import { orderStatus } from '@/api/constants'
 import { watch } from '@vue/runtime-core'
 import OrderCancel from './components/order-cancel.vue'
+import Confirm from '@/components/library/Confirm'
+import Message from '@/components/library/Message'
 export default {
   name: 'MemberOrder',
   components: { XtxTabs, XtxTabsPanel, XtxPagination, OrderItem, OrderCancel },
@@ -49,16 +57,19 @@ export default {
     const loading = ref(false)
     const total = ref(0)
 
+    const getOrderList = () => {
+      loading.value = true
+      findOrderList(reqParams).then(data => {
+        orderList.value = data.result.items
+        total.value = data.result.counts
+        loading.value = false
+      })
+    }
     // 筛选条件变化重新加载
     watch(
       reqParams,
       () => {
-        loading.value = true
-        findOrderList(reqParams).then(data => {
-          orderList.value = data.result.items
-          total.value = data.result.counts
-          loading.value = false
-        })
+        getOrderList()
       },
       { immediate: true }
     )
@@ -69,7 +80,20 @@ export default {
       reqParams.orderState = index
     }
 
-    return { activeName, orderList, orderStatus, tabClick, loading, total, reqParams, ...useCancel() }
+    // 删除订单
+    const handleDelete = order => {
+      console.log(1)
+      Confirm({ text: '确认删除订单吗？' })
+        .then(() => {
+          deleteOrder(order.id).then(() => {
+            Message({ type: 'success', text: '删除成功' })
+            getOrderList()
+          })
+        })
+        .catch(() => {})
+    }
+
+    return { activeName, orderList, orderStatus, tabClick, loading, total, reqParams, ...useCancel(), handleDelete }
   }
 }
 

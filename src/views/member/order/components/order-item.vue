@@ -7,7 +7,9 @@
         <i class="iconfont icon-down-time"></i>
         <b>付款截止：{{ timeText }}</b>
       </span>
-      <a href="" class="del" v-if="[5, 6].includes(order.orderState)">删除</a>
+      <a @click="$emit('on-delete', order)" href="javascript:;" class="del" v-if="[5, 6].includes(order.orderState)"
+        >删除</a
+      >
     </div>
     <div class="body">
       <div class="column goods">
@@ -38,7 +40,7 @@
       </div>
       <div class="column amount">
         <p class="red">¥{{ order.payMoney }}</p>
-        <p>（含运费：¥{{ order.postFee }}）</p>
+        <p>（含运费：¥{{ order.postFee }}</p>
         <p>在线支付</p>
       </div>
       <div class="column action">
@@ -83,7 +85,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['on-cancel'],
+  emits: ['on-cancel', 'on-delete'],
   setup(props) {
     const { start, timeText } = usePayTime()
     start(props.order.countdown)
