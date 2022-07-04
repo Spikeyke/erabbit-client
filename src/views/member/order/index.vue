@@ -9,6 +9,7 @@
       <div v-if="loading" class="loading"></div>
       <div class="none" v-if="!loading && orderList.length === 0">暂无数据</div>
       <OrderItem
+        @on-logistics="handleLogistics"
         @on-confirm="handleConfirm"
         @on-delete="handleDelete"
         @on-cancel="handleCancel"
@@ -27,6 +28,8 @@
     />
     <!-- 取消原因组件 -->
     <OrderCancel ref="orderCancelCom" />
+    <!-- 查看物流组件 -->
+    <OrderLogistics ref="orderLogisticsCom" />
   </div>
 </template>
 
@@ -42,9 +45,10 @@ import { watch } from '@vue/runtime-core'
 import OrderCancel from './components/order-cancel.vue'
 import Confirm from '@/components/library/Confirm'
 import Message from '@/components/library/Message'
+import OrderLogistics from './components/order-logistics.vue'
 export default {
   name: 'MemberOrder',
-  components: { XtxTabs, XtxTabsPanel, XtxPagination, OrderItem, OrderCancel },
+  components: { XtxTabs, XtxTabsPanel, XtxPagination, OrderItem, OrderCancel, OrderLogistics },
   setup() {
     const activeName = ref('first')
 
@@ -104,7 +108,8 @@ export default {
       reqParams,
       ...useCancel(),
       handleDelete,
-      ...useConfirm()
+      ...useConfirm(),
+      ...useLogistics()
     }
   }
 }
@@ -134,6 +139,15 @@ const useConfirm = () => {
       .catch(() => {})
   }
   return { handleConfirm }
+}
+
+// 查看物流逻辑
+const useLogistics = () => {
+  const orderLogisticsCom = ref(null)
+  const handleLogistics = order => {
+    orderLogisticsCom.value.open(order)
+  }
+  return { handleLogistics, orderLogisticsCom }
 }
 </script>
 <style lang="less" scoped>

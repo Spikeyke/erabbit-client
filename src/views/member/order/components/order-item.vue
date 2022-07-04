@@ -15,7 +15,7 @@
       <div class="column goods">
         <ul>
           <li v-for="goods in order.skus" :key="goods.id">
-            <RouterLink class="image" :to="`/product/${goods.id}`">
+            <RouterLink class="image" :to="`/product/${goods.spuId}`">
               <img :src="goods.image" alt="" />
             </RouterLink>
             <div class="info">
@@ -34,9 +34,11 @@
         <!-- 待收货 查看物流 -->
         <!-- 待评价 评价商品 -->
         <!-- 已完成 查看评价 -->
-        <p v-if="order.orderState === 3"><a class="green" href="">查看物流</a></p>
-        <p v-if="order.orderState === 4"><a class="green" href="">评价商品</a></p>
-        <p v-if="order.orderState === 5"><a class="green" href="">查看评价</a></p>
+        <p @click="$emit('on-logistics', order)" v-if="order.orderState === 3">
+          <a class="green" href="javascript:;">查看物流</a>
+        </p>
+        <p v-if="order.orderState === 4"><a class="green" href="javascript:;">评价商品</a></p>
+        <p v-if="order.orderState === 5"><a class="green" href="javascript:;">查看评价</a></p>
       </div>
       <div class="column amount">
         <p class="red">¥{{ order.payMoney }}</p>
@@ -81,7 +83,7 @@ export default {
       default: () => ({})
     }
   },
-  emits: ['on-cancel', 'on-delete', 'on-confirm'],
+  emits: ['on-cancel', 'on-delete', 'on-confirm', 'on-logistics'],
   setup(props) {
     const { start, timeText } = usePayTime()
     start(props.order.countdown)
