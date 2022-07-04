@@ -6,10 +6,18 @@
     </XtxTabs>
     <!-- 订单列表 -->
     <div class="order-list">
+      <div v-if="loading" class="loading"></div>
+      <div class="none" v-if="!loading && orderList.length === 0">暂无数据</div>
       <OrderItem v-for="item in orderList" :key="item.id" :order="item" />
     </div>
     <!-- 分页组件 -->
-    <XtxPagination />
+    <XtxPagination
+      v-if="total > 0"
+      :curent-page="reqParams.page"
+      :page-size="reqParams.pageSize"
+      :total="total"
+      @current-change="reqParams.page = $event"
+    />
   </div>
 </template>
 
@@ -21,22 +29,36 @@ import XtxPagination from '@/components/library/xtx-pagination.vue'
 import OrderItem from './components/order-item.vue'
 import { findOrderList } from '@/api/order'
 import { orderStatus } from '@/api/constants'
+import { watch } from '@vue/runtime-core'
 export default {
   name: 'MemberOrder',
   components: { XtxTabs, XtxTabsPanel, XtxPagination, OrderItem },
   setup() {
     const activeName = ref('first')
 
-    // 获取数据
+    // 筛选条件
     const reqParams = reactive({
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
       orderState: 0
     })
     const orderList = ref([])
-    findOrderList(reqParams).then(data => {
-      orderList.value = data.result.items
-    })
+    const loading = ref(false)
+    const total = ref(0)
+
+    // 筛选条件变化重新加载
+    watch(
+      reqParams,
+      () => {
+        loading.value = true
+        findOrderList(reqParams).then(data => {
+          orderList.value = data.result.items
+          total.value = data.result.counts
+          loading.value = false
+        })
+      },
+      { immediate: true }
+    )
 
     // 点击选项卡
     const tabClick = ({ index }) => {
@@ -44,8 +66,28 @@ export default {
       reqParams.orderState = index
     }
 
-    return { activeName, orderList, orderStatus, tabClick }
+    return { activeName, orderList, orderStatus, tabClick, loading, total, reqParams }
   }
 }
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.order-list {
+  padding: 20px;
+  position: relative;
+  min-height: 400px;
+}
+.loading {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(255, 255, 255, 0.9) url(../../../assets/images/loading.gif) no-repeat center;
+}
+.none {
+  height: 400px;
+  text-align: center;
+  line-height: 400px;
+  color: #999;
+}
+</style>
