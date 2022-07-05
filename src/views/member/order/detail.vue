@@ -3,6 +3,7 @@
     <!-- 头部 -->
     <DetailAction :order="order" />
     <!-- 进度 -->
+    <DetailStep :order="order" />
     <!-- 物流 -->
     <!-- 信息 -->
   </div>
@@ -13,9 +14,10 @@ import { ref } from '@vue/reactivity'
 import DetailAction from './components/detail-action.vue'
 import { findOrderDetail } from '@/api/order'
 import { useRoute } from 'vue-router'
+import DetailStep from './components/detail-step.vue'
 export default {
   name: 'MemberDetail',
-  components: { DetailAction },
+  components: { DetailAction, DetailStep },
   setup() {
     const route = useRoute()
     const order = ref(null)
