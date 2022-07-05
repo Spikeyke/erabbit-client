@@ -11,8 +11,8 @@
       </template>
       <template #fallback>loading...</template>
     </Suspense>
-
     <!-- 信息 -->
+    <DetailInfo :order="order" />
   </div>
 </template>
 
@@ -23,9 +23,10 @@ import { findOrderDetail } from '@/api/order'
 import { useRoute } from 'vue-router'
 import DetailStep from './components/detail-step.vue'
 import DetailLogistics from './components/detail-logistics.vue'
+import DetailInfo from './components/detail-info.vue'
 export default {
   name: 'MemberDetail',
-  components: { DetailAction, DetailStep, DetailLogistics },
+  components: { DetailAction, DetailStep, DetailLogistics, DetailInfo },
   setup() {
     const route = useRoute()
     const order = ref(null)
